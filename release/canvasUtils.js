@@ -3,7 +3,6 @@ var canvasUtils_prototype = function() {
   (function(_myTrait_) {
     var _ctx;
     _myTrait_._getCtx = function(t) {
-
       if (!_ctx) {
         var can = document.createElement("canvas");
         _ctx = can.getContext("2d");
@@ -13,9 +12,7 @@ var canvasUtils_prototype = function() {
     _myTrait_.calcObjSizes = function(page) {
 
       var iter = this.createIteratorFor(page.words);
-
       var w = null;
-
       while (w = iter.next()) {
         var len = this.textLength(w.text + " ", page);
         w.w = len;
@@ -229,102 +226,6 @@ var canvasUtils_prototype = function() {
 
       // The pagination part is left out from this
       return;
-
-      /*
-           // console.log("Pagination ", this);
-           
-           // calculate the line heights...
-           
-           
-           
-           // console.log("Line Heights ", me._lineHeight);
-           
-           // And finally, position the items accordingly...
-           var index = 0,
-               x = page.x,
-               y = page.y,
-               leftOver = null;
-           
-           // console.log("Page ", page);
-           // console.log("Line heights ", me._lineHeight);
-           
-           var item = startFrom;
-           
-           while(item) {
-               
-           
-               var ch = item;
-           
-               var i = ch._lineIndex,
-                   h = me._lineHeight[i];
-               if(y+h>(page.y+page.h)) {
-                   leftOver = ch;
-                   break;
-               }
-               if(ch._lineIndex>index) {
-                   x = page.x;
-                   y += me._lineHeight[i-1] +lineStep;
-                   index = ch._lineIndex;
-               }
-           
-               if(y+h>(page.y+page.h)) {
-                   leftOver = ch;
-                   break;
-               }        
-               
-               ch.x(x).y( y + (h - ch.h()) );
-               
-               if(ch._newline) {
-                   var area = ch.hitArea() || {};
-                   area.x = ch.x();
-                   area.y = y;
-                   area.w = (page.x+page.w) - area.x;
-                   area.h = h;
-                   ch.hitArea(area);
-               } else {
-                   var area = ch.hitArea() || {};
-                   area.x = ch.x();
-                   area.y = y;
-                   area.w = ch.w()+wordStep;
-                   area.h = h;
-                   ch.hitArea(area);            
-               }
-               
-               x+=ch.w()+wordStep;
-           
-               var next = item.next(),
-                   bSet = false;
-               if(next) {
-                   if(next._lineIndex == item._lineIndex) {
-                       if(next.h() < item.h()/2) {
-                           var subPage = {
-                               x : x,
-                               y : y,
-                               w : ( page.x + page.w) - x,
-                               h : item.h()
-                           }
-                           var loopTo = this.orientLines(subPage, next);
-                           
-                           // if(loopTo==next) return null;
-                           
-                           x  = page.x;
-                           y += item.h();
-           
-                           bSet = true;
-                           item = loopTo;
-                           
-                           if(item) calculateLines(item);
-                       }
-                   }    
-               }
-            
-               if(!bSet) item = item.next();
-               
-               
-           }
-           
-           return leftOver;
-           */
 
     }
     _myTrait_.renderPage = function(page, ctx, useFunctionalCtx) {
