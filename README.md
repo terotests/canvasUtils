@@ -41,5 +41,12 @@ Example:
 
 http://jsfiddle.net/uh1qhpd6/
 
+# Automatically fitting the content
+
+This is experimental feature to fit the content to the container area
+
+http://jsfiddle.net/g0v9m8L8/
+
+
 
 
