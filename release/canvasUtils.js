@@ -400,6 +400,7 @@ var canvasUtils_prototype = function() {
           words: []
         }
       }
+
       if (!res.words) res.words = [];
       res.words.length = 0;
 

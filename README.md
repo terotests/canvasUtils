@@ -13,6 +13,7 @@ Supports HTML Canvas word wrapping to box with newlines, aligment modes:
 - fill
 
 Step 1: create a page definition
+
 ```javascript
 var page = {  w : 200, 
               h : 100, 
