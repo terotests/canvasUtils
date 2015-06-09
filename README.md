@@ -38,7 +38,7 @@ Where "context" is the HTML5 canvas context.
 
 Example:
 
-http://jsfiddle.net/L3q9b497/
+http://jsfiddle.net/uh1qhpd6/
 
 
 
