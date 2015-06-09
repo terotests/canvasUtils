@@ -5,6 +5,8 @@ Tools for manipulating the HTML 5 Canvas
 
 Documentation: TODO.
 
+## renderText( text, pageDefinition, context)
+
 Step 1: create a page definition
 ```javascript
 var page = {  w : 200, 
