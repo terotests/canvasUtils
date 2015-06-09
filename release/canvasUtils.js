@@ -368,6 +368,8 @@ var canvasUtils_prototype = function() {
         }
         error = testHeight - page.h;
 
+        myPage._autoFontSize = useFontSize;
+
       } else {
         this.prepareLines(myPage);
       }
