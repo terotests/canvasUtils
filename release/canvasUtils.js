@@ -327,7 +327,7 @@ var canvasUtils_prototype = function() {
            */
 
     }
-    _myTrait_.renderPage = function(page, ctx) {
+    _myTrait_.renderPage = function(page, ctx, useFunctionalCtx) {
       /*
              "fontSize": 16,
              "fontFamily": "Arial",
@@ -371,8 +371,13 @@ var canvasUtils_prototype = function() {
 
       var start_x = x;
 
-      ctx.textBaseline = 'bottom';
-      ctx.font = this.fontStyleString(page);
+      if (useFunctionalCtx) {
+        ctx.textBaseline('bottom');
+        ctx.font(this.fontStyleString(page));
+      } else {
+        ctx.textBaseline = 'bottom';
+        ctx.font = this.fontStyleString(page);
+      }
 
       for (var line_i = 0; line_i < lineCnt; line_i++) {
         var lineH = page._lineHeight[line_i];
@@ -402,6 +407,12 @@ var canvasUtils_prototype = function() {
       var it = this.calcObjSizes(myPage);
       this.prepareLines(myPage);
       this.renderPage(myPage, ctx);
+    }
+    _myTrait_.renderText2 = function(text, page, ctx) {
+      var myPage = this.txtToObjs(text, page);
+      var it = this.calcObjSizes(myPage);
+      this.prepareLines(myPage);
+      this.renderPage(myPage, ctx, true);
     }
     _myTrait_.textLength = function(txt, page) {
       var ctx = this._getCtx();
