@@ -332,6 +332,7 @@ var canvasUtils_prototype = function() {
         var r = 1;
 
         var fsEstimate = Math.sqrt(page.w * page.h / txtLen);
+        if (fsEstimate > page.h) fsEstimate = page.h;
         var me = this;
         var tryWith = function(newSize) {
           useFontSize = newSize;
