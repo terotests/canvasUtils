@@ -136,6 +136,8 @@ var canvasUtils_prototype = function() {
       page._lineHeight = [];
       page._lineCnt = 0;
 
+      page._hOverFlow = 0;
+
       var width = page.w, // the document width;
         height = page.h,
         x = 0,
@@ -176,6 +178,9 @@ var canvasUtils_prototype = function() {
             pushToLine(lineIndex, ch, true);
 
             totalW += ch.w + wordStep;
+
+            if (totalW > page.w) page._hOverFlow = totalW - page.w;
+
             ch._lineIndex = lineIndex;
             ch._total = totalW;
             page._lineCnt = lineIndex + 1;
@@ -187,6 +192,7 @@ var canvasUtils_prototype = function() {
               lineIndex++;
               pushToLine(lineIndex, ch, true);
               totalW = ch.w + wordStep;
+              if (totalW > page.w) page._hOverFlow = totalW - page.w;
               totalH += maxH;
               ch._total = totalW;
               ch._lineIndex = lineIndex;
@@ -224,8 +230,13 @@ var canvasUtils_prototype = function() {
       }
       calculateLines(iterator);
 
+      var tot = 0;
+      for (var i = 0; i < page._lineCnt; i++)
+        tot += page._lineHeight[i];
+
+      tot += (page.lineStep || 5) * page._lineCnt;
       // The pagination part is left out from this
-      return;
+      return tot;
 
     }
     _myTrait_.renderPage = function(page, ctx, useFunctionalCtx) {
@@ -308,8 +319,61 @@ var canvasUtils_prototype = function() {
 
       var myPage = this.txtToObjs(text, page);
       var it = this.calcObjSizes(myPage);
-      this.prepareLines(myPage);
+
+      var origFont = page.fontSize;
+
+      if (page.fitToPage) {
+        var maxCnt = 10,
+          error = 0,
+          step = 4,
+          txtLen = text.length;
+        var testHeight = this.prepareLines(myPage);
+        var useFontSize = origFont;
+        var r = 1;
+
+        var fsEstimate = Math.sqrt(page.w * page.h / txtLen);
+        var me = this;
+        var tryWith = function(newSize) {
+          useFontSize = newSize;
+          myPage.fontSize = useFontSize;
+          me.calcObjSizes(myPage);
+          testHeight = me.prepareLines(myPage);
+          error = testHeight - page.h;
+        }
+        tryWith(fsEstimate);
+
+        while (maxCnt > 0 && (Math.abs(error) > 1)) {
+          var fsCurr = Math.sqrt(page.w * testHeight / txtLen);
+          if (!step) step = Math.abs(fsCurr - fsEstimate);
+          if (page.h < testHeight) {
+            useFontSize = useFontSize - step * r;
+          } else {
+            useFontSize = useFontSize + step * r;
+          }
+          tryWith(useFontSize);
+          maxCnt--;
+          r = r - 0.04;
+        }
+        maxCnt = 20;
+        while (maxCnt > 0 && (error >= 0)) {
+          useFontSize = useFontSize - 1;
+          tryWith(useFontSize);
+          maxCnt--;
+        }
+
+        if (myPage._hOverFlow) {
+          myPage.fontSize = useFontSize * 0.9 * (myPage.w / (myPage.w + myPage._hOverFlow));
+          this.calcObjSizes(myPage);
+          testHeight = this.prepareLines(myPage);
+        }
+        error = testHeight - page.h;
+
+      } else {
+        this.prepareLines(myPage);
+      }
       this.renderPage(myPage, ctx);
+
+      myPage.fontSize = origFont;
     }
     _myTrait_.renderText2 = function(text, page, ctx) {
       var myPage = this.txtToObjs(text, page);

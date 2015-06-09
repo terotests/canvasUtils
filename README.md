@@ -20,6 +20,7 @@ var page = {  w : 200,
               bold : true, // optional
               italic : true, // optional
               fontSize : 48, 
+              fitToPage : true, // optional, if set to true, tries to fit to box
               fontFamily : "Arial" };
 ```
 
