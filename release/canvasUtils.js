@@ -390,6 +390,7 @@ var canvasUtils_prototype = function() {
 
         if (microStep > page.width * 0.2) microStep = 0;
         if (line_i == lineCnt - 1) microStep = 0;
+        if (line.length > 0 && line[line.length - 1]._newline) microStep = 0;
 
         for (var word_i = 0; word_i < line.length; word_i++) {
           var ch = line[word_i];
