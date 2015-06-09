@@ -7,6 +7,13 @@ Documentation: TODO.
 
 ## renderText( text, pageDefinition, context)
 
+Supports HTML Canvas word wrapping to box with newlines, aligment modes:
+
+- left
+- right
+- center
+- fill
+
 Step 1: create a page definition
 ```javascript
 var page = {  w : 200, 
