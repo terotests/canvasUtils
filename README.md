@@ -3,8 +3,6 @@
 
 Tools for manipulating the HTML 5 Canvas 
 
-Documentation: TODO.
-
 ## renderText( text, pageDefinition, context)
 
 Supports HTML Canvas word wrapping to box with newlines, aligment modes:
