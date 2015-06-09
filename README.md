@@ -17,6 +17,8 @@ Step 1: create a page definition
 var page = {  w : 200, 
               h : 100, 
               align : "right",
+              bold : true, // optional
+              italic : true, // optional
               fontSize : 48, 
               fontFamily : "Arial" };
 ```
