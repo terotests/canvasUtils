@@ -1,15 +1,17 @@
-var canvasUtils_prototype = function() {
-  'use strict';;
-  (function(_myTrait_) {
+"use strict";
+
+var canvasUtils_prototype = function canvasUtils_prototype() {
+  "use strict";;
+  (function (_myTrait_) {
     var _ctx;
-    _myTrait_._getCtx = function(t) {
+    _myTrait_._getCtx = function (t) {
       if (!_ctx) {
         var can = document.createElement("canvas");
         _ctx = can.getContext("2d");
       }
       return _ctx;
-    }
-    _myTrait_.calcObjSizes = function(page) {
+    };
+    _myTrait_.calcObjSizes = function (page) {
 
       var iter = this.createIteratorFor(page.words);
       var w = null;
@@ -20,10 +22,8 @@ var canvasUtils_prototype = function() {
       }
 
       return page;
-
-
-    }
-    _myTrait_.createIteratorFor = function(words, startIndex) {
+    };
+    _myTrait_.createIteratorFor = function (words, startIndex) {
       /*
            {
              "words": [
@@ -49,13 +49,13 @@ var canvasUtils_prototype = function() {
            }
            */
       var para_i = 0,
-        word_i = 0;
+          word_i = 0;
       var iteratorObj = {
-        start: function() {
+        start: function start() {
           para_i = 0;
           word_i = 0;
         },
-        next: function() {
+        next: function next() {
           var para = words[para_i];
           if (!para) return null;
           if (para.length <= word_i) {
@@ -67,7 +67,7 @@ var canvasUtils_prototype = function() {
             return para[i];
           }
         },
-        prev: function() {
+        prev: function prev() {
           if (word_i <= 0) {
             if (para_i <= 0) return null;
             para_i--;
@@ -78,18 +78,18 @@ var canvasUtils_prototype = function() {
           word_i--;
           return para[word_i];
         }
-      }
+      };
       return iteratorObj;
-    }
-    _myTrait_.fontStyleString = function(page) {
+    };
+    _myTrait_.fontStyleString = function (page) {
 
       var str = Math.floor(page.fontSize) + "px " + page.fontFamily;
       if (page.italic) str = "italic " + str;
       if (page.bold) str = "bold " + str;
 
       return str;
-    }
-    _myTrait_.prepareLines = function(page) {
+    };
+    _myTrait_.prepareLines = function (page) {
 
       // Root item...
       /*
@@ -138,37 +138,38 @@ var canvasUtils_prototype = function() {
 
       page._hOverFlow = 0;
 
-      var width = page.w, // the document width;
-        height = page.h,
-        x = 0,
-        y = 0,
-        me = this,
-        lineIndex = 0,
-        pageIndex = 0,
-        totalW = 0,
-        maxH = 0,
-        totalH = 0,
-        itemsAtLine = 0,
-        lineStep = page.lineStep || 4,
-        wordStep = page.wordStep || 0;
+      var width = page.w,
+          // the document width;
+      height = page.h,
+          x = 0,
+          y = 0,
+          me = this,
+          lineIndex = 0,
+          pageIndex = 0,
+          totalW = 0,
+          maxH = 0,
+          totalH = 0,
+          itemsAtLine = 0,
+          lineStep = page.lineStep || 4,
+          wordStep = page.wordStep || 0;
 
       //if(startFrom) lineIndex = startFrom._lineIndex;
       //if(!startFrom) startFrom = root.firstChild();
 
-      var calculateLines = function(startFrom) {
+      var calculateLines = function calculateLines(startFrom) {
         itemsAtLine = 0;
         totalW = 0;
         lineIndex = 0; // if several pages, this might not be true
         var ch = null;
 
-        var pushToLine = function(lineIndex, item, reset) {
+        var pushToLine = function pushToLine(lineIndex, item, reset) {
           if (!page._lines[lineIndex]) {
             page._lines[lineIndex] = [];
           } else {
             if (reset) page._lines[lineIndex].length = 0;
           }
           page._lines[lineIndex].push(item);
-        }
+        };
 
         while (ch = startFrom.next()) {
 
@@ -212,10 +213,8 @@ var canvasUtils_prototype = function() {
             totalW = 0;
             totalH += maxH;
           }
-
         }
-        for (var i = 0; i < page._lineCnt; i++)
-          page._lineHeight[i] = 0;
+        for (var i = 0; i < page._lineCnt; i++) page._lineHeight[i] = 0;
 
         startFrom.start();
 
@@ -226,20 +225,17 @@ var canvasUtils_prototype = function() {
             page._lineHeight[i] = ch.h;
           }
         }
-
-      }
+      };
       calculateLines(iterator);
 
       var tot = 0;
-      for (var i = 0; i < page._lineCnt; i++)
-        tot += page._lineHeight[i];
+      for (var i = 0; i < page._lineCnt; i++) tot += page._lineHeight[i];
 
       tot += (page.lineStep || 5) * page._lineCnt;
       // The pagination part is left out from this
       return tot;
-
-    }
-    _myTrait_.renderPage = function(page, ctx, useFunctionalCtx) {
+    };
+    _myTrait_.renderPage = function (page, ctx, useFunctionalCtx) {
       /*
              "fontSize": 16,
              "fontFamily": "Arial",
@@ -274,9 +270,9 @@ var canvasUtils_prototype = function() {
            */
 
       var lineCnt = page._lineCnt,
-        x = 0,
-        y = 0,
-        lineStep = 5;
+          x = 0,
+          y = 0,
+          lineStep = 5;
       if (page.x) x += page.x;
       if (page.y) x += page.y;
       if (page.lineStep) lineStep = page.lineStep;
@@ -284,10 +280,10 @@ var canvasUtils_prototype = function() {
       var start_x = x;
 
       if (useFunctionalCtx) {
-        ctx.textBaseline('bottom');
+        ctx.textBaseline("bottom");
         ctx.font(this.fontStyleString(page));
       } else {
-        ctx.textBaseline = 'bottom';
+        ctx.textBaseline = "bottom";
         ctx.font = this.fontStyleString(page);
       }
 
@@ -297,8 +293,8 @@ var canvasUtils_prototype = function() {
         x = start_x;
         var microStep = 0;
         if (page.align == "center") x += (page.w - line[line.length - 1]._total) / 2;
-        if (page.align == "right") x += (page.w - line[line.length - 1]._total);
-        if (page.align == "fill" && (line.length > 1)) microStep = (page.w - line[line.length - 1]._total) / (line.length - 1);
+        if (page.align == "right") x += page.w - line[line.length - 1]._total;
+        if (page.align == "fill" && line.length > 1) microStep = (page.w - line[line.length - 1]._total) / (line.length - 1);
 
         if (microStep > page.width * 0.2) microStep = 0;
         if (line_i == lineCnt - 1) microStep = 0;
@@ -312,10 +308,8 @@ var canvasUtils_prototype = function() {
         }
         y += page._lineHeight[line_i] + lineStep;
       }
-
-
-    }
-    _myTrait_.renderText = function(text, page, ctx) {
+    };
+    _myTrait_.renderText = function (text, page, ctx) {
 
       var myPage = this.txtToObjs(text, page);
       var it = this.calcObjSizes(myPage);
@@ -324,9 +318,9 @@ var canvasUtils_prototype = function() {
 
       if (page.fitToPage) {
         var maxCnt = 10,
-          error = 0,
-          step = 4,
-          txtLen = text.length;
+            error = 0,
+            step = 4,
+            txtLen = text.length;
         var testHeight = this.prepareLines(myPage);
         var useFontSize = origFont;
         var r = 1;
@@ -334,16 +328,16 @@ var canvasUtils_prototype = function() {
         var fsEstimate = Math.sqrt(page.w * page.h / txtLen);
         if (fsEstimate > page.h) fsEstimate = page.h;
         var me = this;
-        var tryWith = function(newSize) {
+        var tryWith = function tryWith(newSize) {
           useFontSize = newSize;
           myPage.fontSize = useFontSize;
           me.calcObjSizes(myPage);
           testHeight = me.prepareLines(myPage);
           error = testHeight - page.h;
-        }
+        };
         tryWith(fsEstimate);
 
-        while (maxCnt > 0 && (Math.abs(error) > 1)) {
+        while (maxCnt > 0 && Math.abs(error) > 1) {
           var fsCurr = Math.sqrt(page.w * testHeight / txtLen);
           if (!step) step = Math.abs(fsCurr - fsEstimate);
           if (page.h < testHeight) {
@@ -356,7 +350,7 @@ var canvasUtils_prototype = function() {
           r = r - 0.04;
         }
         maxCnt = 20;
-        while (maxCnt > 0 && (error >= 0)) {
+        while (maxCnt > 0 && error >= 0) {
           useFontSize = useFontSize - 1;
           tryWith(useFontSize);
           maxCnt--;
@@ -370,27 +364,25 @@ var canvasUtils_prototype = function() {
         error = testHeight - page.h;
 
         myPage._autoFontSize = useFontSize;
-
       } else {
         this.prepareLines(myPage);
       }
       this.renderPage(myPage, ctx);
 
       myPage.fontSize = origFont;
-    }
-    _myTrait_.renderText2 = function(text, page, ctx) {
+    };
+    _myTrait_.renderText2 = function (text, page, ctx) {
       var myPage = this.txtToObjs(text, page);
       var it = this.calcObjSizes(myPage);
       this.prepareLines(myPage);
       this.renderPage(myPage, ctx, true);
-    }
-    _myTrait_.textLength = function(txt, page) {
+    };
+    _myTrait_.textLength = function (txt, page) {
       var ctx = this._getCtx();
       ctx.font = this.fontStyleString(page);
       return ctx.measureText(txt).width;
-
-    }
-    _myTrait_.txtToObjs = function(text, res) {
+    };
+    _myTrait_.txtToObjs = function (text, res) {
 
       // The lines of the text
       var lines = text.split("\n");
@@ -399,17 +391,17 @@ var canvasUtils_prototype = function() {
       if (!res) {
         res = {
           words: []
-        }
+        };
       }
 
       if (!res.words) res.words = [];
       res.words.length = 0;
 
-      lines.forEach(function(line) {
+      lines.forEach(function (line) {
         var txtList = line.split(" ");
         var lineObs = [],
-          i = 0;
-        txtList.forEach(function(txt) {
+            i = 0;
+        txtList.forEach(function (txt) {
           var t = txt; // do not trim this time
           if (t.length > 0) {
             var o = {
@@ -433,95 +425,24 @@ var canvasUtils_prototype = function() {
       });
 
       return res;
-    }
-  }(this));;
-  (function(_myTrait_) {
-    var _initDone;
-    _myTrait_.drawBox = function(ctx, x, y, w, h, fillStyle, strokeStyle) {
-      ctx.beginPath();
-      ctx.rect(x, y, w, h);
-      ctx.closePath();
-      if (fillStyle) {
-        ctx.fillStyle = fillStyle;
-        ctx.fill();
-      }
-      if (strokeStyle) {
-        ctx.strokeStyle = strokeStyle;
-        ctx.stroke();
-      }
-
-    }
-    _myTrait_.drawCircle = function(ctx, x, y, r) {
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, 2 * Math.PI, false);
-      ctx.closePath();
-
-
-    }
-    _myTrait_.drawDashedLine = function(ctx, xStart, yStart, xEnd, yEnd, size, relation) {
-
-      if (!relation) relation = 0.5;
-      if (!size) size = 10;
-
-      var stepEmpty = (1 - relation) * size,
-        step = relation * size;
-
-      var dv_x = xEnd - xStart,
-        dv_y = yEnd - yStart;
-
-      var len = Math.sqrt(dv_x * dv_x + dv_y * dv_y);
-      var i = dv_x / len
-      j = dv_y / len;
-
-      var x = xStart,
-        y = yStart;
-
-      while (len > 0) {
-
-        if (step > len) step = len;
-        this.drawLine(ctx, x, y, x + i * step, y + j * step);
-        x = x + i * step;
-        y = y + j * step;
-
-        len = len - step;
-        if (len <= 0) break;
-
-        x = x + i * stepEmpty;
-        y = y + j * stepEmpty;
-        len = len - stepEmpty;
-
-      }
-
-
-    }
-    _myTrait_.drawLine = function(ctx, xStart, yStart, xEnd, yEnd) {
-
-      ctx.beginPath();
-      ctx.moveTo(xStart, yStart);
-      ctx.lineTo(xEnd, yEnd);
-      ctx.stroke();
-
-    }
-  }(this));;
-  (function(_myTrait_) {
-    if (_myTrait_.__traitInit && !_myTrait_.hasOwnProperty("__traitInit"))
-      _myTrait_.__traitInit = _myTrait_.__traitInit.slice();
-    if (!_myTrait_.__traitInit) _myTrait_.__traitInit = []
-    _myTrait_.__traitInit.push(function(ctx) {
-
-    });
-  }(this));
-}
-var canvasUtils = function(a, b, c, d, e, f, g, h) {
+    };
+  })(this);;
+  (function (_myTrait_) {
+    if (_myTrait_.__traitInit && !_myTrait_.hasOwnProperty("__traitInit")) _myTrait_.__traitInit = _myTrait_.__traitInit.slice();
+    if (!_myTrait_.__traitInit) _myTrait_.__traitInit = [];
+    _myTrait_.__traitInit.push(function (ctx) {});
+  })(this);
+};
+var canvasUtils = function canvasUtils(a, b, c, d, e, f, g, h) {
   if (this instanceof canvasUtils) {
     var args = [a, b, c, d, e, f, g, h];
     if (this.__factoryClass) {
       var m = this;
       var res;
-      this.__factoryClass.forEach(function(initF) {
+      this.__factoryClass.forEach(function (initF) {
         res = initF.apply(m, args);
       });
-      if (Object.prototype.toString.call(res) == '[object Function]') {
+      if (Object.prototype.toString.call(res) == "[object Function]") {
         if (res._classInfo.name != canvasUtils._classInfo.name) return new res(a, b, c, d, e, f, g, h);
       } else {
         if (res) return res;
@@ -529,18 +450,17 @@ var canvasUtils = function(a, b, c, d, e, f, g, h) {
     }
     if (this.__traitInit) {
       var m = this;
-      this.__traitInit.forEach(function(initF) {
+      this.__traitInit.forEach(function (initF) {
         initF.apply(m, args);
-      })
+      });
     } else {
-      if (typeof this.init == 'function')
-        this.init.apply(this, args);
+      if (typeof this.init == "function") this.init.apply(this, args);
     }
   } else return new canvasUtils(a, b, c, d, e, f, g, h);
 };
 canvasUtils._classInfo = {
-  name: 'canvasUtils'
+  name: "canvasUtils"
 };
 canvasUtils.prototype = new canvasUtils_prototype();
-if (typeof(window) != 'undefined') window['canvasUtils'] = canvasUtils;
-if (typeof(window) != 'undefined') window['canvasUtils_prototype'] = canvasUtils_prototype;
+if (typeof window != "undefined") window["canvasUtils"] = canvasUtils;
+if (typeof window != "undefined") window["canvasUtils_prototype"] = canvasUtils_prototype;
