@@ -528,6 +528,17 @@
   };
   canvasUtils.prototype = new canvasUtils_prototype();
 
+  (function () {
+    if (typeof define !== "undefined" && define !== null && define.amd != null) {
+      __amdDefs__["canvasUtils"] = canvasUtils;
+      this.canvasUtils = canvasUtils;
+    } else if (typeof module !== "undefined" && module !== null && module.exports != null) {
+      module.exports["canvasUtils"] = canvasUtils;
+    } else {
+      this.canvasUtils = canvasUtils;
+    }
+  }).call(new Function("return this")());
+
   if (typeof define !== "undefined" && define !== null && define.amd != null) {
     define(__amdDefs__);
   }
